@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { detailsUser, updateUserProfile } from '../Actions/userActions';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/LoadingBox';
 
 export default function ProfileScreen() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [phNumber, setPhNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
   
@@ -14,11 +17,7 @@ export default function ProfileScreen() {
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
   const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
-  const {
-    success: successUpdate,
-    error: errorUpdate,
-    loading: loadingUpdate,
-  } = userUpdateProfile;
+  const {success: successUpdate, error: errorUpdate, loading: loadingUpdate} = userUpdateProfile;
   const dispatch = useDispatch();
   useEffect(() => {
     if (!user) {
@@ -27,15 +26,16 @@ export default function ProfileScreen() {
       } else {
         setName(user.name);
         setEmail(user.email);
+        setPhNumber(user.phNumber);
       }
-    }, [dispatch, userInfo._id, user]);
+    }, [dispatch, user, userInfo._id]);
   const submitHandler = (e) => {
-    e.preventDefault();
+   e.preventDefault();
     // dispatch update profile
     if (password !== confirmPassword) {
         alert('Password and Confirm Password Are Not Matched');
       } else {
-        dispatch(updateUserProfile({ userId: user._id, name, email, password }));
+        dispatch(updateUserProfile({ userId: user._id, phNumber, name, email, password }));
       }
   };
   return (
@@ -45,17 +45,19 @@ export default function ProfileScreen() {
           <h1>User Profile</h1>
         </div>
         {loading ? (
-          "Loading"
-        ) : error ? (
-         "Error"
-        ) : (
-          <>
-            {loadingUpdate && "loading"}
+         <LoadingBox></LoadingBox>
+         ) : error ? (
+           <MessageBox variant = 'danger'>{error}</MessageBox>
+           ) : (
+           <>
+            {loadingUpdate && <LoadingBox></LoadingBox>}
             {errorUpdate && (
-              "Error"
+              <MessageBox variant="danger">{errorUpdate}</MessageBox>
             )}
             {successUpdate && (
-             "Error"
+              <MessageBox variant="success">
+                Profile
+              </MessageBox>
             )}
             <div>
               <label htmlFor="name">Name</label>
@@ -78,6 +80,17 @@ export default function ProfileScreen() {
               ></input>
             </div>
             <div>
+              <label htmlFor="phone">Mobile Number</label>
+              <input
+                id="phone"
+                type="tel"
+                pattern="[0-9]{10}"
+                placeholder="Enter Mobile Number"
+                value={phNumber}
+                onChange={(e) => setPhNumber(e.target.value)}
+              ></input>
+            </div>
+            <div>
               <label htmlFor="password">Password</label>
               <input
                 id="password"
@@ -87,7 +100,7 @@ export default function ProfileScreen() {
               ></input>
             </div>
             <div>
-              <label htmlFor="confirmPassword">confirm Password</label>
+              <label htmlFor="confirmPassword">Confirm Password</label>
               <input
                 id="confirmPassword"
                 type="password"
@@ -102,7 +115,7 @@ export default function ProfileScreen() {
               </button>
             </div>
           </>
-        )}
+          )}
       </form>
     </div>
   );

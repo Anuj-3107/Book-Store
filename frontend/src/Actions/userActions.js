@@ -38,10 +38,10 @@ export const register = (name, email,phNumber, password) => async (dispatch) => 
   }
 };
 
-export const signin = (email, password) => async (dispatch) => {
-  dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
+export const signin = (emailOrMob, password) => async (dispatch) => {
+  dispatch({ type: USER_SIGNIN_REQUEST, payload: { emailOrMob, password } });
   try {
-    const { data } = await Axios.post('/api/users/signin', { email, password });
+    const { data } = await Axios.post('/api/users/signin', { emailOrMob, password });
     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
@@ -91,10 +91,8 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
     localStorage.setItem('userInfo', JSON.stringify(data));
   } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
+    const message = error.response && error.response.data.message
+        ? error.response.data.message : error.message;
     dispatch({ type: USER_UPDATE_PROFILE_FAIL, payload: message });
   }
 };

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { signin } from '../Actions/userActions';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 
 export default function SigninScreen(props) {
-  const [email, setEmail] = useState('');
+  const [emailOrMob, setEmailORMob] = useState('');
   const [password, setPassword] = useState('');
 
   const redirect = props.location.search
@@ -19,7 +21,7 @@ export default function SigninScreen(props) {
   const submitHandler = (e) => {
     e.preventDefault();
     // TODO: sign in action
-    dispatch(signin(email, password));
+    dispatch(signin(emailOrMob, password));
   };
   useEffect(() => {
     if (userInfo) {
@@ -32,16 +34,16 @@ export default function SigninScreen(props) {
         <div>
           <h1>Sign In</h1>
         </div>
-        {loading &&"loading" }
-        {error && "error"}
+        {loading && <LoadingBox/> }
+        {error && <MessageBox variant = "danger">{error}</MessageBox> }
         <div>
-          <label htmlFor="email">Email address</label>
+          <label htmlFor="email">Email address / Mobile Number</label>
           <input
-            type="email"
+            type="tel"
             id="email"
-            placeholder="Enter email"
+            placeholder="Enter email / mobile number"
             required
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmailORMob(e.target.value)}
           ></input>
         </div>
         <div>

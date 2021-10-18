@@ -4,12 +4,14 @@ export default {
         {
       name: 'Arjun',
       email: 'admin@gmail.com',
+      phNumber: '1111122222',
       password: bcrypt.hashSync('1234', 8),
       isAdmin: true,
     },
     {
       name: 'Abhijeet Raj',
       email: 'user@gmail.com',
+      phNumber: '1234567890',
       password: bcrypt.hashSync('1234', 8),
       isAdmin: false,
     },

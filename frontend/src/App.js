@@ -6,7 +6,7 @@ import SigninScreen from './screens/SigninScreen';
 import WishListScreen from './screens/WishListScreen';
 import {useDispatch, useSelector } from 'react-redux';
 import { signout } from './Actions/userActions';
-import RegisterScreen from './screens/registerScreen';
+import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ProductUploadScreen from './screens/ProductUploadScreen';
 import SellerDetail from './screens/SellerDetail';
