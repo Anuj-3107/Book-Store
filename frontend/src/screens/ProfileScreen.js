@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { detailsUser, updateUserProfile } from '../Actions/userActions';
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants';
 import LoadingBox from '../components/LoadingBox';
-import MessageBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
 
 export default function ProfileScreen() {
     const [name, setName] = useState('');
@@ -30,7 +30,7 @@ export default function ProfileScreen() {
       }
     }, [dispatch, user, userInfo._id]);
   const submitHandler = (e) => {
-   e.preventDefault();
+    e.preventDefault();
     // dispatch update profile
     if (password !== confirmPassword) {
         alert('Password and Confirm Password Are Not Matched');
@@ -56,7 +56,7 @@ export default function ProfileScreen() {
             )}
             {successUpdate && (
               <MessageBox variant="success">
-                Profile
+                Profile Updated Successfully.
               </MessageBox>
             )}
             <div>

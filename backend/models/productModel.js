@@ -7,9 +7,10 @@ const productSchema = new mongoose.Schema(
         image: {type: String,required:true },
         price: {type: String, required: true },
         description: {type: String },
-        pincode: {type: String,required:true },
         sellerName:{type:String ,required:true},
+        sellerEmail:{type:String ,required:true},
         phNumber:{type:String,required:true},
+        pincode: {type: String,required:true },
     },
     {
         timestamp:true,

@@ -6,6 +6,7 @@ import { PRODUCT_DETAILS_FAIL,
    PRODUCT_LIST_SUCCESS, 
    PRODUCT_UPLOAD_FAIL,
   PRODUCT_UPLOAD_REQUEST,
+   PRODUCT_UPLOAD_RESET,
    PRODUCT_UPLOAD_SUCCESS } from "../constants/productConstants"
 import Axios from 'axios';
 export const listProducts=()=>async(dispatch)=>{
@@ -20,20 +21,6 @@ export const listProducts=()=>async(dispatch)=>{
     }
 }
  
-export const createProduct = ({name,image,price,publisher,description,sellerName,phNumber,pinCode}) => async (dispatch, getState) => {
-  dispatch({ type: PRODUCT_UPLOAD_REQUEST});
-  try {
-    const { data } = await Axios.post('/api/products/createProducts', {name,image,price,publisher,description,sellerName,phNumber,pinCode});
-    dispatch({ type: PRODUCT_UPLOAD_SUCCESS, payload: data });
-  } catch (error) {
-    const message =
-      error.response && error.response.data.message
-        ? error.response.data.message
-        : error.message;
-    dispatch({ type: PRODUCT_UPLOAD_FAIL, error: message });
-  }
-};
-
 export const detailsProduct = (productId) => async (dispatch) => {
     dispatch({ type: PRODUCT_DETAILS_REQUEST, payload: productId });
     try {
@@ -49,3 +36,25 @@ export const detailsProduct = (productId) => async (dispatch) => {
       });
     }
   };
+
+  export const uploadProduct = (product) => async (dispatch, getState) => {
+    dispatch({ type: PRODUCT_UPLOAD_REQUEST});
+    const {userSignin: {userInfo} } = getState();
+    const email= userInfo.email;
+    product.append('sellerEmail', email);
+    try {
+      const { data } = await Axios.post('/api/products/uploadProducts', product,
+      {
+        'content-type':'multipart/form-data',
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      dispatch({ type: PRODUCT_UPLOAD_SUCCESS, payload: data.product });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({ type: PRODUCT_UPLOAD_FAIL, payload: message });
+    }
+  };
+  

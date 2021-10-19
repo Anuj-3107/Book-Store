@@ -114,8 +114,8 @@ function App() {
                 <Route path="/" component={HomeScreen} exact={true} ></Route>
                 <Route path="/product/:id" component={ProductScreen}></Route>
                 <Route path="/register" component={RegisterScreen}></Route>
-                <Route path="/productUpload" component={ProductUploadScreen}></Route>
-                <Route path="/sellersDetail/:id" component={SellerDetail}></Route>
+                <PrivateRoute path="/productUpload" component={ProductUploadScreen}></PrivateRoute>
+                <PrivateRoute path="/sellersDetail/:id" component={SellerDetail}></PrivateRoute>
                 <PrivateRoute path="/profile" component={ProfileScreen} ></PrivateRoute>
                 
               </main>

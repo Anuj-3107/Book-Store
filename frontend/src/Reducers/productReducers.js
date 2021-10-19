@@ -6,17 +6,17 @@ import { PRODUCT_DETAILS_FAIL,
    PRODUCT_LIST_SUCCESS,
    PRODUCT_UPLOAD_REQUEST,
    PRODUCT_UPLOAD_SUCCESS,
-   PRODUCT_UPLOAD_FAIL
+   PRODUCT_UPLOAD_FAIL,
+   PRODUCT_UPLOAD_RESET
  } from "../constants/productConstants";
 
 export  const productListReducer=(state={products:[]},action)=>{
  switch(action.type){
-
     case PRODUCT_LIST_REQUEST:
-       return {loading:true};
+       return {loading: true};
     case PRODUCT_LIST_SUCCESS:
         return{
-        loading:false , products:action.payload
+        loading: false , products:action.payload
         }
     case PRODUCT_LIST_FAIL:
         return{loading:false ,error:action.payload}
@@ -27,7 +27,6 @@ export  const productListReducer=(state={products:[]},action)=>{
 
 export  const productUploadReducer=(state={product:{}},action)=>{
   switch(action.type){
- 
      case PRODUCT_UPLOAD_REQUEST:
         return {loading:true};
      case PRODUCT_UPLOAD_SUCCESS:
@@ -36,6 +35,8 @@ export  const productUploadReducer=(state={product:{}},action)=>{
          }
      case PRODUCT_UPLOAD_FAIL:
          return{loading:false ,error:action.payload}
+     case PRODUCT_UPLOAD_RESET:
+         return {}
      default:
          return state;
   }

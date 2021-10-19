@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createProduct } from '../Actions/productActions';
-import Axios from "axios";
+import { uploadProduct } from '../Actions/productActions';
+import LoadingBox from '../components/LoadingBox';
+import MessageBox from '../components/MessageBox';
+import { PRODUCT_UPLOAD_RESET } from '../constants/productConstants';
 
 export default function SellScreen(props) {
-    const [name, setName] = useState('');
-    const [image, setImage] = useState('');
-    const [price, setPrice] = useState('');
-    const [publisher, setPublisher] = useState('');
-    const [description, setDescription] = useState('');
-    const [sellerName, setSellerName] = useState('');
-    const [phNumber, setPhNumber] = useState('');
-    const [pinCode, setPinCode]= useState('');
-
-  //const dispatch = useDispatch();
-  const userSignin = useSelector((state) => state.userSignin);
-  const { userInfo } = userSignin;
-  const submitHandler = async(e) => {
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+  const [price, setPrice] = useState('');
+  const [publisher, setPublisher] = useState('');
+  const [description, setDescription] = useState('');
+  const [sellerName, setSellerName] = useState('');
+  const [phNumber, setPhNumber] = useState('');
+  const [pinCode, setPinCode]= useState('');
+  const dispatch = useDispatch();
+  const productUpload = useSelector((state) => state.productUpload);
+  const { loading, error, success} = productUpload;
+  const submitHandler = (e) => {
+    e.preventDefault();
     const bodyFormData = new FormData();
     bodyFormData.append('name',name);
     bodyFormData.append('image',image);
@@ -26,20 +28,16 @@ export default function SellScreen(props) {
     bodyFormData.append('description',description);
     bodyFormData.append('phNumber',phNumber);
     bodyFormData.append('pinCode',pinCode);
-    const config={
-      headers:{
-          'content-type':'multipart/form-data',
-          Authorization:`Bearer${userInfo.token}`
-      }
+    dispatch(uploadProduct(bodyFormData));
   }
-   // e.preventDefault();
-     await Axios.post('/api/products/createProducts', bodyFormData,{config});
-  };
   return (
     <div>
       <form className="form" onSubmit={submitHandler}>
         <div>
           <h1>Upload Product</h1>
+          {loading && <LoadingBox></LoadingBox>}
+          {error && <MessageBox variant="danger">{error}</MessageBox>}
+          {success && <MessageBox variant="success">Product Uploaded Successfully.</MessageBox>}
           <label htmlFor="name">Book Name</label>
           <input
             type="text"
